@@ -7,25 +7,23 @@ pipeline {
             stage('git') {
               steps {
                 echo 'scm'
-		git branch: 'main', url: 'https://github.com/jyostnabhavani/mindcircuit13.git'
+		git branch: 'main', url: 'https://github.com/jyostnabhavani/jyomindcircuit-facebook.git'
             }
         }
-stage(' SONAR ') {
+	stage(' SONAR ') {
             steps {
                 echo 'SCANNING PROJECT'
-		sh '''mvn sonar:sonar \\
-  		-Dsonar.host.url=http://34.207.253.43:9000 \\
-  		-Dsonar.login=25c74b9b0ac939f74bcddd0ca93ace0ff756603c'''
+		sh 'mvn sonar:sonar'
+  		
             }
         }
-stage('build') {
+	stage('build') {
             steps {
                 echo 'generating artifact using maven build tool'
 		sh 'mvn clean install'
   		 }
         }
-            
-		stage('nexus artifactory') {
+        stage('nexus artifactory') {
             steps {
                 echo 'publish to nexus'
 		sh 'mvn deploy'
@@ -34,7 +32,7 @@ stage('build') {
 	stage('deploy to tomcat') {
             steps {
                 echo 'tomcat deploy'
-		     deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://34.229.184.18:8091/')], contextPath: 'mc-app', war: '**/*.war'
+ deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://34.229.184.18:8091/')], contextPath: 'mc-app-facebook', war: '**/*.war'
 		}
        }
      }
