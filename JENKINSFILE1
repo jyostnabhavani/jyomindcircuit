@@ -10,7 +10,24 @@ pipeline {
 		git branch: 'main', url: 'https://github.com/jyostnabhavani/jyomindcircuit-facebook.git'
             }
         }
-	stage(' SONAR ') {
+	stage('Build') {
+            parallel {
+                stage('Build Backend') {
+                    steps {
+                        // Your backend build commands
+                    }
+                }
+                stage('Build Frontend') {
+                    steps {
+                        // Your frontend build commands
+                    }
+		}		  
+	}
+
+
+
+
+stage(' SONAR ') {
             steps {
                 echo 'SCANNING PROJECT'
 		sh 'mvn sonar:sonar'
